@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class JwtService {
     private final String secretKey = Utils.generateSecretKey();
-    private final long expirationTime = 3600000;
+    private final long expirationTime = 3600000; //
     private final JWSVerifier verifier;
 
     public JwtService() throws JOSEException {
@@ -22,6 +22,7 @@ public class JwtService {
 
     public String generateToken(String username) {
         try {
+        	
             Date now = new Date();
             Date expiration = new Date(now.getTime() + expirationTime);
 

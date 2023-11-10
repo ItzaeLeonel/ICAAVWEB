@@ -38,9 +38,9 @@ public class SatCuentaContable {
     private Integer nivel;
     @Column(name = "CUENTA_MAYOR", columnDefinition = "VARCHAR(10)")
     private String cuentaMayor;
-    @Column(name = "CUENTA_SAT", columnDefinition = "VARCHAR(10)")
+    @Column(name = "CUENTA_SAT", columnDefinition = "VARCHAR(10)") //Codigo Agrupador
     private String cuentaSat;
-    @Column(name = "NOMBRE_CUENTA", columnDefinition = "VARCHAR(200)")
+    @Column(name = "NOMBRE_CUENTA", columnDefinition = "VARCHAR(200)") //Nombre cuenta
     private String nombreCuenta;
     @Column(name = "NATURALEZA", columnDefinition = "VARCHAR(1)")
     private String naturaleza;

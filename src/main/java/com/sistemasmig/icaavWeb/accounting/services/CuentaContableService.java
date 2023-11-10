@@ -13,7 +13,13 @@ import com.sistemasmig.icaavWeb.accounting.models.dto.CuentasContablesSP;
 import com.sistemasmig.icaavWeb.accounting.models.dto.InsertCuentaC;
 import com.sistemasmig.icaavWeb.accounting.models.dto.ListCuentasContables;
 import com.sistemasmig.icaavWeb.accounting.models.enums.CuentaContableEstatusEnum;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,6 +84,23 @@ public class CuentaContableService {
         System.out.println(pr_estatus);
     return cuentaContableManager.createByCuentaContableSP(pr_id_empresa, pr_id_cuenta_sat, pr_anio, pr_mes, pr_numero_cuenta, pr_tipo_cuenta, pr_nombre, pr_saldo_inicial, pr_saldo_final, pr_cargos, pr_abonos, pr_cargos_acumulado, pr_abonos_acumulados, pr_cuenta_x_pagar, pr_estatus, pr_numero_complementaria, pr_cuenta_complementaria);
          
+    }
+    
+    public List<CuentaContable> findDigitoCuentacontable(CuentaContable cuentaContable) {
+    	List<CuentaContable> cuentasFiltradas = new ArrayList<>();
+    	
+    	if (cuentaContable.getNumeroCuenta() != null) {
+    		cuentasFiltradas = this.findAll().stream()
+                    .filter(c -> c.getNumeroCuenta().charAt(0) == cuentaContable.getNumeroCuenta().charAt(0))
+                    .collect(Collectors.toList());
+    	}
+    	
+    	if (cuentaContable.getTipoCuenta() != null) {
+    		cuentasFiltradas = this.findAll().stream()
+                    .filter(c -> c.getTipoCuenta().equals(cuentaContable.getTipoCuenta()))
+                    .collect(Collectors.toList());
+    	}
+    	return cuentasFiltradas;
     }
 
 }

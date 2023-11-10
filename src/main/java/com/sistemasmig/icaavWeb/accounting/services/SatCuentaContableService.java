@@ -8,10 +8,13 @@ import com.sistemasmig.icaavWeb.accounting.exceptions.EntityNotExistentException
 import com.sistemasmig.icaavWeb.accounting.exceptions.EntityNotFoundException;
 import com.sistemasmig.icaavWeb.accounting.exceptions.ExistentEntityException;
 import com.sistemasmig.icaavWeb.accounting.managers.SatCuentaContableManager;
+import com.sistemasmig.icaavWeb.accounting.models.CuentaContable;
 import com.sistemasmig.icaavWeb.accounting.models.SatCuentaContable;
 import com.sistemasmig.icaavWeb.accounting.models.dto.ListCuentasSatBG;
 import com.sistemasmig.icaavWeb.accounting.models.dto.ListCuentasSatCA;
 import java.util.List;
+import java.util.stream.Collectors;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,6 +76,13 @@ public class SatCuentaContableService {
     
     public List <ListCuentasSatBG> getBusqGralSsat(String pr_consulta_gral) throws Exception, EntityNotExistentException {
     return satCuentaContableManager.getByBusqGralSat(pr_consulta_gral);
+    }
+    
+    public List<SatCuentaContable> findDigitoCuentacontable(String identificarCuenta) {
+    	List<SatCuentaContable> cuentasSatFiltradas = this.findAll().stream()
+                .filter(c -> c.getCuentaSat().charAt(0) == identificarCuenta.charAt(0))
+                .collect(Collectors.toList());
+    	return cuentasSatFiltradas;
     }
 }
 

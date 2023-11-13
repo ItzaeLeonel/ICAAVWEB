@@ -7,10 +7,10 @@ package com.sistemasmig.icaavWeb.accounting.managers;
 
 import com.sistemasmig.icaavWeb.accounting.containers.PagedResponse;
 import com.sistemasmig.icaavWeb.accounting.containers.Paging;
+import com.sistemasmig.icaavWeb.accounting.entity.ConfigMoneda;
 import com.sistemasmig.icaavWeb.accounting.exceptions.BusinessLogicException;
 import com.sistemasmig.icaavWeb.accounting.exceptions.EntityNotExistentException;
-import com.sistemasmig.icaavWeb.accounting.exceptions.ExistentEntityException;
-import com.sistemasmig.icaavWeb.accounting.models.ConfigMoneda;
+
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -25,6 +25,8 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.sistemasmig.icaavWeb.accounting.repositories.ConfigMonedaRepository;
 
 /**
@@ -45,11 +47,7 @@ public class ConfigMonedaManager {
     
 
     public ConfigMoneda getById(Integer id) throws EntityNotExistentException {
-        ConfigMoneda configMoneda = configMonedaRepository.getByIdAndBorrado(id, Boolean.FALSE);
-        if (configMoneda!=null) {
-            return configMoneda;
-        }
-        throw new EntityNotExistentException(ConfigMoneda.class,id.toString());
+    	return configMonedaRepository.findById(id).orElse(null);
     }
     
     public PagedResponse<ConfigMoneda> getConfigMoneda(ConfigMoneda filter, Paging paging){
@@ -68,8 +66,8 @@ public class ConfigMonedaManager {
         if(filter.getEstatusConfigMonedaEnum()!=null){
             predicates.add(cb.equal(root.get("estatusConfigMonedaEnum"), filter.getEstatusConfigMonedaEnum()));
         }
-        if(filter.getFechaModificacion()!=null && filter.getFechaModificacion2()!=null){
-            predicates.add(cb.between(root.get("fechaModificacion"), filter.getFechaModificacion(),filter.getFechaModificacion2()));
+        if(filter.getFechaModificacion()!=null ){
+            predicates.add(cb.equal(root.get("fechaModificacion"), filter.getFechaModificacion()));
             cq.orderBy(cb.desc(root.get("fechaModificacion")));
         }
         if(filter.getId()!=null){
@@ -205,67 +203,20 @@ public class ConfigMonedaManager {
         return new PagedResponse<ConfigMoneda>((int) page.getTotalElements(),page.getTotalPages(), paging.getPage(), paging.getPageSize(), page.getContent());   
     }
 
-    public ConfigMoneda createConfigMoneda(ConfigMoneda configMoneda) throws BusinessLogicException, ExistentEntityException, EntityNotExistentException {
-        validateConfigMoneda(configMoneda);
-        //validateUnique(configMoneda);
-        configMoneda.setBorrado(Boolean.FALSE);
-        return configMonedaRepository.save(configMoneda);
-    }
+    @Transactional(rollbackFor = { BusinessLogicException.class, Exception.class })
+	public ConfigMoneda save(ConfigMoneda entity) {
+		return configMonedaRepository.save(entity);
+	}
 
-    private void validateConfigMoneda(ConfigMoneda configMoneda) throws BusinessLogicException, EntityNotExistentException {
-        if (configMoneda.getGrupoEmpresa()==null) {
-            throw new BusinessLogicException("El campo GrupoEmpresa es requerido para el objeto ConfigMoneda");
-        } else {
-            if(configMoneda.getGrupoEmpresa().getId()==null){
-                throw new BusinessLogicException("El campo id de GrupoEmpresa es requerido para el objeto ConfigMoneda");
-            }
-            empresaManager.getById(configMoneda.getGrupoEmpresa().getId());
-        }
-    }
-    
-    /*private void validateUnique(ConfigMoneda configMoneda) throws ExistentEntityException {
-        List<ConfigMoneda> configMonedaes = configMonedaRepository.findByNombre(configMoneda.getNombre());
-        if (configMonedaes!=null && !configMonedaes.isEmpty()) {
-            throw new ExistentEntityException(ConfigMoneda.class,"nombre="+configMoneda.getNombre());
-        } 
-    }
-*/
-    public ConfigMoneda updateConfigMoneda(Integer configMonedaId, ConfigMoneda configMoneda) throws EntityNotExistentException, BusinessLogicException {
-        
-        ConfigMoneda persistedConfigMoneda = getById(configMonedaId);
-        if (persistedConfigMoneda != null) {
-            if(configMoneda.getEstatusConfigMonedaEnum()!=null){
-                persistedConfigMoneda.setEstatusConfigMonedaEnum(configMoneda.getEstatusConfigMonedaEnum());
-            }
-            if(configMoneda.getGrupoEmpresa()!=null){
-                persistedConfigMoneda.setGrupoEmpresa(configMoneda.getGrupoEmpresa());
-            }
-            if(configMoneda.getIdMoneda()!=null){
-                persistedConfigMoneda.setIdMoneda(configMoneda.getIdMoneda());
-            }
-            if(configMoneda.getIdUsuario()!=null){
-                persistedConfigMoneda.setIdUsuario(configMoneda.getIdUsuario());
-            }
-            if(configMoneda.getMonedaNacional()!=null){
-                persistedConfigMoneda.setMonedaNacional(configMoneda.getMonedaNacional());
-            }
-            if(configMoneda.getTipoCambio()!=null){
-                persistedConfigMoneda.setTipoCambio(configMoneda.getTipoCambio());
-            }
-            if(configMoneda.getTipoCambioAuto()!=null){
-                persistedConfigMoneda.setTipoCambioAuto(configMoneda.getTipoCambioAuto());
-            }
-            return configMonedaRepository.save(persistedConfigMoneda);
-        } else {
-            throw new EntityNotExistentException(ConfigMoneda.class,configMonedaId.toString());
-        }
-    }
+	@Transactional
+	public ConfigMoneda update(ConfigMoneda entity) {
+		return configMonedaRepository.save(entity);
+	}
 
-    public void deleteConfigMoneda(Integer configMonedaId) throws EntityNotExistentException {
-        ConfigMoneda configMoneda = getById(configMonedaId);
-        configMoneda.setBorrado(Boolean.TRUE);
-        configMonedaRepository.save(configMoneda);
-    }
+	@Transactional
+	public void delete(ConfigMoneda entity) {
+		configMonedaRepository.save(entity);
+	}
 
     public List<ConfigMoneda> findAll(){
         return configMonedaRepository.findAll();

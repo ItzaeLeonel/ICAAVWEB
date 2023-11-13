@@ -3,8 +3,9 @@
 package com.sistemasmig.icaavWeb.accounting.managers;
 
 
-import com.sistemasmig.icaavWeb.accounting.models.dto.ListSelectorCuentas;
 import com.sistemasmig.icaavWeb.accounting.exceptions.EntityNotExistentException;
+import com.sistemasmig.icaavWeb.accounting.model.ListSelectorCuentas;
+
 import java.util.List;
 import com.sistemasmig.icaavWeb.accounting.repositories.StoredProcedure.SelectorCuentasSPRepository;
 import jakarta.persistence.EntityManager;

@@ -9,13 +9,13 @@ package com.sistemasmig.icaavWeb.accounting.controllers;
 
 import com.sistemasmig.icaavWeb.accounting.containers.PagedResponse;
 import com.sistemasmig.icaavWeb.accounting.containers.Paging;
+import com.sistemasmig.icaavWeb.accounting.entity.TipoPaquete;
 import com.sistemasmig.icaavWeb.accounting.exceptions.BadRequestException;
 import com.sistemasmig.icaavWeb.accounting.exceptions.BusinessLogicException;
 import com.sistemasmig.icaavWeb.accounting.exceptions.EntityNotExistentException;
 import com.sistemasmig.icaavWeb.accounting.exceptions.ExistentEntityException;
 import com.sistemasmig.icaavWeb.accounting.exceptions.NoAccessGrantedException;
 import com.sistemasmig.icaavWeb.accounting.exceptions.handler.model.ErrorDetails;
-import com.sistemasmig.icaavWeb.accounting.models.TipoPaquete;
 import com.sistemasmig.icaavWeb.accounting.services.TipoPaqueteService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

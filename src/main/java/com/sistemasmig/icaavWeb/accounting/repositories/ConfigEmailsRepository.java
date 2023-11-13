@@ -5,14 +5,15 @@
  */
 package com.sistemasmig.icaavWeb.accounting.repositories;
 
-import com.sistemasmig.icaavWeb.accounting.models.ConfigEmails;
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.sistemasmig.icaavWeb.accounting.entity.ConfigEmails;
 
 /**
  *
  * @author Waldir.Valle
  */
 public interface ConfigEmailsRepository extends JpaRepository<ConfigEmails, Integer>{
-    ConfigEmails getByIdAndBorrado(Integer id, Boolean borrado);
+  
    
 }

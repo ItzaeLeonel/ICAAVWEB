@@ -5,8 +5,9 @@
  */
 package com.sistemasmig.icaavWeb.accounting.repositories;
 
-import com.sistemasmig.icaavWeb.accounting.models.UsuarioAcceso;
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.sistemasmig.icaavWeb.accounting.entity.UsuarioAcceso;
 
 /**
  *

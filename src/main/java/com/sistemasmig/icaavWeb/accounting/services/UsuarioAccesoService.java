@@ -3,12 +3,13 @@ package com.sistemasmig.icaavWeb.accounting.services;
 
 import com.sistemasmig.icaavWeb.accounting.containers.PagedResponse;
 import com.sistemasmig.icaavWeb.accounting.containers.Paging;
+import com.sistemasmig.icaavWeb.accounting.entity.UsuarioAcceso;
 import com.sistemasmig.icaavWeb.accounting.exceptions.BusinessLogicException;
 import com.sistemasmig.icaavWeb.accounting.exceptions.EntityNotExistentException;
 import com.sistemasmig.icaavWeb.accounting.exceptions.EntityNotFoundException;
 import com.sistemasmig.icaavWeb.accounting.exceptions.ExistentEntityException;
 import com.sistemasmig.icaavWeb.accounting.managers.UsuarioAccesoManager;
-import com.sistemasmig.icaavWeb.accounting.models.UsuarioAcceso;
+
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

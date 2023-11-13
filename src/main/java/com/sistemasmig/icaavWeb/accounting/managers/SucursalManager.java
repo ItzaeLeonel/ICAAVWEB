@@ -6,11 +6,11 @@ package com.sistemasmig.icaavWeb.accounting.managers;
 
 import com.sistemasmig.icaavWeb.accounting.containers.PagedResponse;
 import com.sistemasmig.icaavWeb.accounting.containers.Paging;
+import com.sistemasmig.icaavWeb.accounting.entity.Sucursales;
+import com.sistemasmig.icaavWeb.accounting.entity.UsuarioSucursal;
 import com.sistemasmig.icaavWeb.accounting.exceptions.BusinessLogicException;
 import com.sistemasmig.icaavWeb.accounting.exceptions.EntityNotExistentException;
 import com.sistemasmig.icaavWeb.accounting.exceptions.ExistentEntityException;
-import com.sistemasmig.icaavWeb.accounting.models.Sucursales;
-import com.sistemasmig.icaavWeb.accounting.models.UsuarioSucursal;
 import com.sistemasmig.icaavWeb.accounting.repositories.SucursalRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;

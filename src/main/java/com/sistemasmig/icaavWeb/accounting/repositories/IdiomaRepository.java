@@ -5,10 +5,11 @@
  */
 package com.sistemasmig.icaavWeb.accounting.repositories;
 
-import com.sistemasmig.icaavWeb.accounting.models.Idioma;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+
+import com.sistemasmig.icaavWeb.accounting.entity.Idioma;
 
 /**
  *

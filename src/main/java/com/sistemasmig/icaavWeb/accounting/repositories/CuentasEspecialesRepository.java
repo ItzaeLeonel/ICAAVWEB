@@ -4,8 +4,9 @@
  */
 package com.sistemasmig.icaavWeb.accounting.repositories;
 
-import com.sistemasmig.icaavWeb.accounting.models.CuentasEspeciales;
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.sistemasmig.icaavWeb.accounting.entity.CuentasEspeciales;
 
 /**
  *

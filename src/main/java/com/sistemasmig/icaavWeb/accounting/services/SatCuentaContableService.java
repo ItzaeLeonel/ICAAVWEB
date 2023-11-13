@@ -3,15 +3,16 @@ package com.sistemasmig.icaavWeb.accounting.services;
 
 import com.sistemasmig.icaavWeb.accounting.containers.PagedResponse;
 import com.sistemasmig.icaavWeb.accounting.containers.Paging;
+import com.sistemasmig.icaavWeb.accounting.entity.CuentaContable;
+import com.sistemasmig.icaavWeb.accounting.entity.SatCuentaContable;
 import com.sistemasmig.icaavWeb.accounting.exceptions.BusinessLogicException;
 import com.sistemasmig.icaavWeb.accounting.exceptions.EntityNotExistentException;
 import com.sistemasmig.icaavWeb.accounting.exceptions.EntityNotFoundException;
 import com.sistemasmig.icaavWeb.accounting.exceptions.ExistentEntityException;
 import com.sistemasmig.icaavWeb.accounting.managers.SatCuentaContableManager;
-import com.sistemasmig.icaavWeb.accounting.models.CuentaContable;
-import com.sistemasmig.icaavWeb.accounting.models.SatCuentaContable;
-import com.sistemasmig.icaavWeb.accounting.models.dto.ListCuentasSatBG;
-import com.sistemasmig.icaavWeb.accounting.models.dto.ListCuentasSatCA;
+import com.sistemasmig.icaavWeb.accounting.model.ListCuentasSatBG;
+import com.sistemasmig.icaavWeb.accounting.model.ListCuentasSatCA;
+
 import java.util.List;
 import java.util.stream.Collectors;
 

@@ -4,12 +4,13 @@
  */
 
 
-import com.sistemasmig.icaavWeb.accounting.models.dto.CuentasEspecialesSP;
-import com.sistemasmig.icaavWeb.accounting.models.dto.DemoLista;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.data.repository.query.Param;
+
+import com.sistemasmig.icaavWeb.accounting.model.CuentasEspecialesSP;
+import com.sistemasmig.icaavWeb.accounting.model.DemoLista;
 
 /**
  *

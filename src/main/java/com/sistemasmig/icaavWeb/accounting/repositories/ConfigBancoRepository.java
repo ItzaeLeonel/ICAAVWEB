@@ -5,14 +5,14 @@
  */
 package com.sistemasmig.icaavWeb.accounting.repositories;
 
-import com.sistemasmig.icaavWeb.accounting.models.ConfigBanco;
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.sistemasmig.icaavWeb.accounting.entity.ConfigBanco;
 
 /**
  *
  * @author Waldir.Valle
  */
 public interface ConfigBancoRepository extends JpaRepository<ConfigBanco, Integer>{
-    ConfigBanco getByIdAndBorrado(Integer id, Boolean borrado);
    
 }

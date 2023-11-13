@@ -5,8 +5,9 @@
  */
 package com.sistemasmig.icaavWeb.accounting.repositories;
 
-import com.sistemasmig.icaavWeb.accounting.models.EstiloEmpresa;
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.sistemasmig.icaavWeb.accounting.entity.EstiloEmpresa;
 
 /**
  *

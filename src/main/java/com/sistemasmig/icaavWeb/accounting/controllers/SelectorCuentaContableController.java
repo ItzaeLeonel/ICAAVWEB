@@ -7,10 +7,10 @@
 package com.sistemasmig.icaavWeb.accounting.controllers;
 
 
-import com.sistemasmig.icaavWeb.accounting.models.dto.ListSelectorCuentas;
 import com.sistemasmig.icaavWeb.accounting.exceptions.BadRequestException;
 import com.sistemasmig.icaavWeb.accounting.exceptions.EntityNotExistentException;
 import com.sistemasmig.icaavWeb.accounting.exceptions.NoAccessGrantedException;
+import com.sistemasmig.icaavWeb.accounting.model.ListSelectorCuentas;
 import com.sistemasmig.icaavWeb.accounting.services.SelectorCuentaContableService;
 import io.swagger.v3.oas.annotations.Parameter;
 import java.util.List;

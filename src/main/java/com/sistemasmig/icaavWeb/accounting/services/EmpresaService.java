@@ -5,12 +5,13 @@ import com.google.gson.Gson;
 import com.sistemasmig.icaavWeb.accounting.Definitions;
 import com.sistemasmig.icaavWeb.accounting.containers.PagedResponse;
 import com.sistemasmig.icaavWeb.accounting.containers.Paging;
+import com.sistemasmig.icaavWeb.accounting.entity.Empresa;
 import com.sistemasmig.icaavWeb.accounting.exceptions.BusinessLogicException;
 import com.sistemasmig.icaavWeb.accounting.exceptions.EntityNotExistentException;
 import com.sistemasmig.icaavWeb.accounting.exceptions.EntityNotFoundException;
 import com.sistemasmig.icaavWeb.accounting.exceptions.ExistentEntityException;
 import com.sistemasmig.icaavWeb.accounting.managers.EmpresaManager;
-import com.sistemasmig.icaavWeb.accounting.models.Empresa;
+
 import java.util.List;
 import java.util.UUID;
 import org.slf4j.Logger;

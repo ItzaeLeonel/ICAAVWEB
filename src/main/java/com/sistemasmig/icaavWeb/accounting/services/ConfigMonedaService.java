@@ -3,18 +3,21 @@ package com.sistemasmig.icaavWeb.accounting.services;
 
 import com.sistemasmig.icaavWeb.accounting.containers.PagedResponse;
 import com.sistemasmig.icaavWeb.accounting.containers.Paging;
+import com.sistemasmig.icaavWeb.accounting.entity.ConfigMoneda;
 import com.sistemasmig.icaavWeb.accounting.exceptions.BusinessLogicException;
 import com.sistemasmig.icaavWeb.accounting.exceptions.EntityNotExistentException;
-import com.sistemasmig.icaavWeb.accounting.exceptions.EntityNotFoundException;
-import com.sistemasmig.icaavWeb.accounting.exceptions.ExistentEntityException;
 import com.sistemasmig.icaavWeb.accounting.managers.ConfigMonedaManager;
-import com.sistemasmig.icaavWeb.accounting.models.ConfigMoneda;
+import com.sistemasmig.icaavWeb.accounting.model.TokenDetalles;
+import com.sistemasmig.icaavWeb.accounting.utils.Constantes;
+import com.sistemasmig.icaavWeb.accounting.utils.Utils;
+
+import jakarta.servlet.http.HttpServletRequest;
+
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 
 @Component
@@ -24,8 +27,15 @@ public class ConfigMonedaService {
     @Autowired
     private ConfigMonedaManager configMonedaManager;
     
-    public ConfigMoneda getById(Integer configMonedaId) throws EntityNotExistentException {
-        return configMonedaManager.getById(configMonedaId);
+    @Autowired
+	private HttpServletRequest request;
+    
+    public ConfigMoneda getById(Integer id) throws EntityNotExistentException {
+    	ConfigMoneda configMoneda = configMonedaManager.getById(id);
+        if (configMoneda!=null && !configMoneda.getBorrado()) {
+            return configMoneda;
+        }
+        throw new EntityNotExistentException(ConfigMoneda.class,id.toString());
     }
     
     public PagedResponse<ConfigMoneda> getConfigMoneda(ConfigMoneda configMoneda,   Paging paging) {
@@ -36,35 +46,34 @@ public class ConfigMonedaService {
         return configMonedaManager.findAll();
     }
     
-    @Transactional(rollbackFor = {BusinessLogicException.class,Exception.class})
-    public ConfigMoneda createConfigMoneda(ConfigMoneda configMoneda) throws BusinessLogicException, ExistentEntityException, EntityNotExistentException {
-        ConfigMoneda configMonedaPersisted = configMonedaManager.createConfigMoneda(configMoneda);
-        return getById(configMonedaPersisted.getId());
+    public ConfigMoneda save(ConfigMoneda entity){
+    	TokenDetalles usuario = (TokenDetalles) request.getAttribute(Constantes.TOKEN_USUARIO);
+    	entity.setIdUsuarioAlt(usuario.getId());
+    	entity.setBorrado(Boolean.FALSE);
+        return configMonedaManager.save(entity);
     }
     
-    public ConfigMoneda updateConfigMoneda(Integer configMonedaId,ConfigMoneda configMoneda) throws BusinessLogicException, EntityNotExistentException, ExistentEntityException {
-        ConfigMoneda configMonedaPersisted = configMonedaManager.updateConfigMoneda(configMonedaId, configMoneda);
-        return getById(configMonedaPersisted.getId());
+    public ConfigMoneda update(Integer id,ConfigMoneda entity) throws EntityNotExistentException{
+    	ConfigMoneda configMoneda = getById(id);
+    	
+        if (configMoneda != null) {
+        	Utils.copyPropertiesIgnoringAndNull(entity, configMoneda, Constantes.COPY_EXEP_ID);
+        	TokenDetalles usuario = (TokenDetalles) request.getAttribute(Constantes.TOKEN_USUARIO);
+        	configMoneda.setIdUsuarioMod(usuario.getId());
+			return configMonedaManager.update(configMoneda);
+        } else {
+            throw new EntityNotExistentException(ConfigMoneda.class,id.toString());
+        }
     }
     
-    public void deleteConfigMoneda(Integer configMonedaId) throws EntityNotExistentException, BusinessLogicException {
-        configMonedaManager.deleteConfigMoneda(configMonedaId);
+    public void delete(Integer id) throws EntityNotExistentException, BusinessLogicException {
+    	ConfigMoneda configMoneda = getById(id);
+    	TokenDetalles usuario = (TokenDetalles) request.getAttribute(Constantes.TOKEN_USUARIO);
+    	configMoneda.setIdUsuarioMod(usuario.getId());
+    	configMoneda.setBorrado(Boolean.TRUE);
+    	configMonedaManager.delete(configMoneda);
         
     }  
-    
-    public Boolean initialize() {
-        try{
-            createConfigMonedas();
-        } catch (BusinessLogicException | EntityNotFoundException | ExistentEntityException | EntityNotExistentException e) {
-            logger.error(e.getMessage(), e);
-            return false;
-        }
-        return true;
-    }
-
-    private void createConfigMonedas() throws EntityNotFoundException, BusinessLogicException, ExistentEntityException, EntityNotExistentException {
-       
-    }
 }
 
 

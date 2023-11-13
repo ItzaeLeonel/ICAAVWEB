@@ -9,10 +9,10 @@ package com.sistemasmig.icaavWeb.accounting.managers;
 
 import com.sistemasmig.icaavWeb.accounting.containers.PagedResponse;
 import com.sistemasmig.icaavWeb.accounting.containers.Paging;
+import com.sistemasmig.icaavWeb.accounting.entity.ConfigBanco;
 import com.sistemasmig.icaavWeb.accounting.exceptions.BusinessLogicException;
 import com.sistemasmig.icaavWeb.accounting.exceptions.EntityNotExistentException;
-import com.sistemasmig.icaavWeb.accounting.exceptions.ExistentEntityException;
-import com.sistemasmig.icaavWeb.accounting.models.ConfigBanco;
+
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -27,6 +27,8 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.sistemasmig.icaavWeb.accounting.repositories.ConfigBancoRepository;
 
 /**
@@ -41,17 +43,11 @@ public class ConfigBancoManager {
     
     @Autowired
     private EntityManager entityManager;
-    
-    @Autowired
-    private EmpresaManager empresaManager;
+   
     
 
     public ConfigBanco getById(Integer id) throws EntityNotExistentException {
-        ConfigBanco configBanco = configBancoRepository.getByIdAndBorrado(id, Boolean.FALSE);
-        if (configBanco!=null) {
-            return configBanco;
-        }
-        throw new EntityNotExistentException(ConfigBanco.class,id.toString());
+    	return configBancoRepository.findById(id).orElse(null);
     }
     
     public PagedResponse<ConfigBanco> getConfigBanco(ConfigBanco filter, Paging paging){
@@ -73,8 +69,8 @@ public class ConfigBancoManager {
         if(filter.getEstatusConfigBancoEnum()!=null){
             predicates.add(cb.equal(root.get("estatusConfigBancoEnum"), filter.getEstatusConfigBancoEnum()));
         }
-        if(filter.getFechaModificacion()!=null && filter.getFechaModificacion2()!=null){
-            predicates.add(cb.between(root.get("fechaModificacion"), filter.getFechaModificacion(),filter.getFechaModificacion2()));
+        if(filter.getFechaModificacion()!=null ){
+            predicates.add(cb.equal(root.get("fechaModificacion"), filter.getFechaModificacion()));
             cq.orderBy(cb.desc(root.get("fechaModificacion")));
         }
         if(filter.getId()!=null){
@@ -210,70 +206,20 @@ public class ConfigBancoManager {
         return new PagedResponse<ConfigBanco>((int) page.getTotalElements(),page.getTotalPages(), paging.getPage(), paging.getPageSize(), page.getContent());   
     }
 
-    public ConfigBanco createConfigBanco(ConfigBanco configBanco) throws BusinessLogicException, ExistentEntityException, EntityNotExistentException {
-        validateConfigBanco(configBanco);
-        //validateUnique(configBanco);
-        configBanco.setBorrado(Boolean.FALSE);
-        return configBancoRepository.save(configBanco);
-    }
+    @Transactional(rollbackFor = { BusinessLogicException.class, Exception.class })
+	public ConfigBanco save(ConfigBanco entity) {
+		return configBancoRepository.save(entity);
+	}
 
-    private void validateConfigBanco(ConfigBanco configBanco) throws BusinessLogicException, EntityNotExistentException {
-        if (configBanco.getGrupoEmpresa()==null) {
-            throw new BusinessLogicException("El campo GrupoEmpresa es requerido para el objeto ConfigBanco");
-        } else {
-            if(configBanco.getGrupoEmpresa().getId()==null){
-                throw new BusinessLogicException("El campo id de GrupoEmpresa es requerido para el objeto ConfigBanco");
-            }
-            empresaManager.getById(configBanco.getGrupoEmpresa().getId());
-        }
-    }
-    
-    /*private void validateUnique(ConfigBanco configBanco) throws ExistentEntityException {
-        List<ConfigBanco> configBancoes = configBancoRepository.findByNombre(configBanco.getNombre());
-        if (configBancoes!=null && !configBancoes.isEmpty()) {
-            throw new ExistentEntityException(ConfigBanco.class,"nombre="+configBanco.getNombre());
-        } 
-    }
-*/
-    public ConfigBanco updateConfigBanco(Integer configBancoId, ConfigBanco configBanco) throws EntityNotExistentException, BusinessLogicException {
-        
-        ConfigBanco persistedConfigBanco = getById(configBancoId);
-        if (persistedConfigBanco != null) {
-            if(configBanco.getCuenta()!=null){
-                persistedConfigBanco.setCuenta(configBanco.getCuenta());
-            }
-            if(configBanco.getEstatusConfigBancoEnum()!=null){
-                persistedConfigBanco.setEstatusConfigBancoEnum(configBanco.getEstatusConfigBancoEnum());
-            }
-            if(configBanco.getGrupoEmpresa()!=null){
-                persistedConfigBanco.setGrupoEmpresa(configBanco.getGrupoEmpresa());
-            }
-            if(configBanco.getIdFormaPago()!=null){
-                persistedConfigBanco.setIdFormaPago(configBanco.getIdFormaPago());
-            }
-            if(configBanco.getIdSatBancos()!=null){
-                persistedConfigBanco.setIdSatBancos(configBanco.getIdSatBancos());
-            }
-            if(configBanco.getRazonSocial()!=null){
-                persistedConfigBanco.setRazonSocial(configBanco.getRazonSocial());
-            }
-            if(configBanco.getRfc()!=null){
-                persistedConfigBanco.setRfc(configBanco.getRfc());
-            }
-            if(configBanco.getUsuario()!=null){
-                persistedConfigBanco.setUsuario(configBanco.getUsuario());
-            }
-            return configBancoRepository.save(persistedConfigBanco);
-        } else {
-            throw new EntityNotExistentException(ConfigBanco.class,configBancoId.toString());
-        }
-    }
+	@Transactional
+	public ConfigBanco update(ConfigBanco entity) {
+		return configBancoRepository.save(entity);
+	}
 
-    public void deleteConfigBanco(Integer configBancoId) throws EntityNotExistentException {
-        ConfigBanco configBanco = getById(configBancoId);
-        configBanco.setBorrado(Boolean.TRUE);
-        configBancoRepository.save(configBanco);
-    }
+	@Transactional
+	public void delete(ConfigBanco entity) {
+		configBancoRepository.save(entity);
+	}
 
     public List<ConfigBanco> findAll(){
         return configBancoRepository.findAll();

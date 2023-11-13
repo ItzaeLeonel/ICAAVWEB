@@ -3,13 +3,14 @@ package com.sistemasmig.icaavWeb.accounting.services;
 
 import com.sistemasmig.icaavWeb.accounting.containers.PagedResponse;
 import com.sistemasmig.icaavWeb.accounting.containers.Paging;
+import com.sistemasmig.icaavWeb.accounting.entity.Idioma;
 import com.sistemasmig.icaavWeb.accounting.exceptions.BusinessLogicException;
 import com.sistemasmig.icaavWeb.accounting.exceptions.EntityNotExistentException;
 import com.sistemasmig.icaavWeb.accounting.exceptions.EntityNotFoundException;
 import com.sistemasmig.icaavWeb.accounting.exceptions.ExistentEntityException;
 import com.sistemasmig.icaavWeb.accounting.managers.IdiomaManager;
 import com.sistemasmig.icaavWeb.accounting.repositories.IdiomaRepository;
-import com.sistemasmig.icaavWeb.accounting.models.Idioma;
+
 import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;

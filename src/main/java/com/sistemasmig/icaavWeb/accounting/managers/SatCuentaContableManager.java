@@ -8,12 +8,13 @@ package com.sistemasmig.icaavWeb.accounting.managers;
 
 import com.sistemasmig.icaavWeb.accounting.containers.PagedResponse;
 import com.sistemasmig.icaavWeb.accounting.containers.Paging;
+import com.sistemasmig.icaavWeb.accounting.entity.SatCuentaContable;
 import com.sistemasmig.icaavWeb.accounting.exceptions.BusinessLogicException;
 import com.sistemasmig.icaavWeb.accounting.exceptions.EntityNotExistentException;
 import com.sistemasmig.icaavWeb.accounting.exceptions.ExistentEntityException;
-import com.sistemasmig.icaavWeb.accounting.models.SatCuentaContable;
-import com.sistemasmig.icaavWeb.accounting.models.dto.ListCuentasSatBG;
-import com.sistemasmig.icaavWeb.accounting.models.dto.ListCuentasSatCA;
+import com.sistemasmig.icaavWeb.accounting.model.ListCuentasSatBG;
+import com.sistemasmig.icaavWeb.accounting.model.ListCuentasSatCA;
+
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;

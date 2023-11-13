@@ -3,18 +3,22 @@ package com.sistemasmig.icaavWeb.accounting.services;
 
 import com.sistemasmig.icaavWeb.accounting.containers.PagedResponse;
 import com.sistemasmig.icaavWeb.accounting.containers.Paging;
+import com.sistemasmig.icaavWeb.accounting.entity.ConfigBanco;
 import com.sistemasmig.icaavWeb.accounting.exceptions.BusinessLogicException;
 import com.sistemasmig.icaavWeb.accounting.exceptions.EntityNotExistentException;
-import com.sistemasmig.icaavWeb.accounting.exceptions.EntityNotFoundException;
-import com.sistemasmig.icaavWeb.accounting.exceptions.ExistentEntityException;
 import com.sistemasmig.icaavWeb.accounting.managers.ConfigBancoManager;
-import com.sistemasmig.icaavWeb.accounting.models.ConfigBanco;
+import com.sistemasmig.icaavWeb.accounting.model.TokenDetalles;
+import com.sistemasmig.icaavWeb.accounting.utils.Constantes;
+import com.sistemasmig.icaavWeb.accounting.utils.Utils;
+
+import jakarta.servlet.http.HttpServletRequest;
+
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
+
 
 
 @Component
@@ -24,8 +28,15 @@ public class ConfigBancoService {
     @Autowired
     private ConfigBancoManager configBancoManager;
     
-    public ConfigBanco getById(Integer configBancoId) throws EntityNotExistentException {
-        return configBancoManager.getById(configBancoId);
+    @Autowired
+	private HttpServletRequest request;
+    
+    public ConfigBanco getById(Integer id) throws EntityNotExistentException {
+    	ConfigBanco configBanco = configBancoManager.getById(id);
+        if (configBanco!=null && !configBanco.getBorrado()) {
+            return configBanco;
+        }
+        throw new EntityNotExistentException(ConfigBanco.class,id.toString());
     }
     
     public PagedResponse<ConfigBanco> getConfigBanco(ConfigBanco configBanco,   Paging paging) {
@@ -36,35 +47,34 @@ public class ConfigBancoService {
         return configBancoManager.findAll();
     }
     
-    @Transactional(rollbackFor = {BusinessLogicException.class,Exception.class})
-    public ConfigBanco createConfigBanco(ConfigBanco configBanco) throws BusinessLogicException, ExistentEntityException, EntityNotExistentException {
-        ConfigBanco configBancoPersisted = configBancoManager.createConfigBanco(configBanco);
-        return getById(configBancoPersisted.getId());
+    public ConfigBanco save(ConfigBanco entity){
+    	TokenDetalles usuario = (TokenDetalles) request.getAttribute(Constantes.TOKEN_USUARIO);
+    	entity.setIdUsuarioAlt(usuario.getId());
+    	entity.setBorrado(Boolean.FALSE);
+        return configBancoManager.save(entity);
     }
     
-    public ConfigBanco updateConfigBanco(Integer configBancoId,ConfigBanco configBanco) throws BusinessLogicException, EntityNotExistentException, ExistentEntityException {
-        ConfigBanco configBancoPersisted = configBancoManager.updateConfigBanco(configBancoId, configBanco);
-        return getById(configBancoPersisted.getId());
+    public ConfigBanco update(Integer id,ConfigBanco entity) throws EntityNotExistentException{
+    	ConfigBanco configBanco = getById(id);
+    	
+        if (configBanco != null) {
+        	Utils.copyPropertiesIgnoringAndNull(entity, configBanco, Constantes.COPY_EXEP_ID);
+        	TokenDetalles usuario = (TokenDetalles) request.getAttribute(Constantes.TOKEN_USUARIO);
+        	configBanco.setIdUsuarioMod(usuario.getId());
+			return configBancoManager.update(configBanco);
+        } else {
+            throw new EntityNotExistentException(ConfigBanco.class,id.toString());
+        }
     }
     
-    public void deleteConfigBanco(Integer configBancoId) throws EntityNotExistentException, BusinessLogicException {
-        configBancoManager.deleteConfigBanco(configBancoId);
+    public void delete(Integer id) throws EntityNotExistentException, BusinessLogicException {
+    	ConfigBanco configBanco = getById(id);
+    	TokenDetalles usuario = (TokenDetalles) request.getAttribute(Constantes.TOKEN_USUARIO);
+    	configBanco.setIdUsuarioMod(usuario.getId());
+    	configBanco.setBorrado(Boolean.TRUE);
+    	configBancoManager.delete(configBanco);
         
     }  
-    
-    public Boolean initialize() {
-        try{
-            createConfigBancos();
-        } catch (BusinessLogicException | EntityNotFoundException | ExistentEntityException | EntityNotExistentException e) {
-            logger.error(e.getMessage(), e);
-            return false;
-        }
-        return true;
-    }
-
-    private void createConfigBancos() throws EntityNotFoundException, BusinessLogicException, ExistentEntityException, EntityNotExistentException {
-       
-    }
 }
 
 

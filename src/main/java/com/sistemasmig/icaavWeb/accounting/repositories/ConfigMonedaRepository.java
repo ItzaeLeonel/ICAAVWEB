@@ -5,14 +5,15 @@
  */
 package com.sistemasmig.icaavWeb.accounting.repositories;
 
-import com.sistemasmig.icaavWeb.accounting.models.ConfigMoneda;
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.sistemasmig.icaavWeb.accounting.entity.ConfigMoneda;
 
 /**
  *
  * @author Waldir.Valle
  */
 public interface ConfigMonedaRepository extends JpaRepository<ConfigMoneda, Integer>{
-    ConfigMoneda getByIdAndBorrado(Integer id, Boolean borrado);
+    
    
 }

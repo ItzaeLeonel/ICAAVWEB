@@ -6,10 +6,11 @@ package com.sistemasmig.icaavWeb.accounting.managers;
 
 import com.sistemasmig.icaavWeb.accounting.containers.PagedResponse;
 import com.sistemasmig.icaavWeb.accounting.containers.Paging;
+import com.sistemasmig.icaavWeb.accounting.entity.PersonalizacionCuenta;
 import com.sistemasmig.icaavWeb.accounting.exceptions.BusinessLogicException;
 import com.sistemasmig.icaavWeb.accounting.exceptions.EntityNotExistentException;
 import com.sistemasmig.icaavWeb.accounting.exceptions.ExistentEntityException;
-import com.sistemasmig.icaavWeb.accounting.models.PersonalizacionCuenta;
+
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -24,7 +25,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
-import com.sistemasmig.icaavWeb.accounting.repositories.CuentaContablePrecRepository;
+import com.sistemasmig.icaavWeb.accounting.repositories.CuentasContablePrecRepository;
 import com.sistemasmig.icaavWeb.accounting.repositories.PersonalizacionCuentaRepository;
 import java.util.logging.Level;
 import java.util.logging.Logger;

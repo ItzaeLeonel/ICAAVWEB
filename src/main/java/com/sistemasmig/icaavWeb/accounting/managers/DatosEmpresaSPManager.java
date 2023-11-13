@@ -4,8 +4,8 @@
  */
 package com.sistemasmig.icaavWeb.accounting.managers;
 
-import com.sistemasmig.icaavWeb.accounting.models.dto.ListDatosEmpresa;
 import com.sistemasmig.icaavWeb.accounting.exceptions.EntityNotExistentException;
+import com.sistemasmig.icaavWeb.accounting.model.ListDatosEmpresa;
 import com.sistemasmig.icaavWeb.accounting.repositories.StoredProcedure.DatosEmpresaRepository;
 import jakarta.persistence.EntityManager;
 import java.util.List;

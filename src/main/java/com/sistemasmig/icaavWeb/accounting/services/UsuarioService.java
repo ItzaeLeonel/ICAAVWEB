@@ -3,12 +3,13 @@ package com.sistemasmig.icaavWeb.accounting.services;
 
 import com.sistemasmig.icaavWeb.accounting.containers.PagedResponse;
 import com.sistemasmig.icaavWeb.accounting.containers.Paging;
+import com.sistemasmig.icaavWeb.accounting.entity.Usuario;
 import com.sistemasmig.icaavWeb.accounting.exceptions.BusinessLogicException;
 import com.sistemasmig.icaavWeb.accounting.exceptions.EntityNotExistentException;
 import com.sistemasmig.icaavWeb.accounting.exceptions.EntityNotFoundException;
 import com.sistemasmig.icaavWeb.accounting.exceptions.ExistentEntityException;
 import com.sistemasmig.icaavWeb.accounting.managers.UsuarioManager;
-import com.sistemasmig.icaavWeb.accounting.models.Usuario;
+
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,20 +52,8 @@ public class UsuarioService {
         usuarioManager.deleteUsuario(usuarioId);
         
     }  
-    
-    public Boolean initialize() {
-        try{
-            createUsuarios();
-        } catch (BusinessLogicException | EntityNotFoundException | ExistentEntityException | EntityNotExistentException e) {
-            logger.error(e.getMessage(), e);
-            return false;
-        }
-        return true;
-    }
 
-    private void createUsuarios() throws EntityNotFoundException, BusinessLogicException, ExistentEntityException, EntityNotExistentException {
-       
-    }
+    
 }
 
 

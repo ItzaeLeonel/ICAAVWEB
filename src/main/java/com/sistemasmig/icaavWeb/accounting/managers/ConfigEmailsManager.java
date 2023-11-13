@@ -9,10 +9,10 @@ package com.sistemasmig.icaavWeb.accounting.managers;
 
 import com.sistemasmig.icaavWeb.accounting.containers.PagedResponse;
 import com.sistemasmig.icaavWeb.accounting.containers.Paging;
+import com.sistemasmig.icaavWeb.accounting.entity.ConfigEmails;
 import com.sistemasmig.icaavWeb.accounting.exceptions.BusinessLogicException;
 import com.sistemasmig.icaavWeb.accounting.exceptions.EntityNotExistentException;
-import com.sistemasmig.icaavWeb.accounting.exceptions.ExistentEntityException;
-import com.sistemasmig.icaavWeb.accounting.models.ConfigEmails;
+
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -27,6 +27,8 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.sistemasmig.icaavWeb.accounting.repositories.ConfigEmailsRepository;
 
 /**
@@ -41,17 +43,11 @@ public class ConfigEmailsManager {
     
     @Autowired
     private EntityManager entityManager;
-    
-    @Autowired
-    private EmpresaManager empresaManager;
+
     
 
     public ConfigEmails getById(Integer id) throws EntityNotExistentException {
-        ConfigEmails configEmails = configEmailsRepository.getByIdAndBorrado(id, Boolean.FALSE);
-        if (configEmails!=null) {
-            return configEmails;
-        }
-        throw new EntityNotExistentException(ConfigEmails.class,id.toString());
+    	return configEmailsRepository.findById(id).orElse(null);
     }
     
     public PagedResponse<ConfigEmails> getConfigEmails(ConfigEmails filter, Paging paging){
@@ -110,8 +106,8 @@ public class ConfigEmailsManager {
             predicates.add(cb.equal(root.get("emailFacturacionUsuario"), filter.getEmailFacturacionUsuario()));
         }
         
-        if(filter.getFechaModificacion()!=null && filter.getFechaModificacion2()!=null){
-            predicates.add(cb.between(root.get("fechaModificacion"), filter.getFechaModificacion(),filter.getFechaModificacion2()));
+        if(filter.getFechaModificacion()!=null ){
+            predicates.add(cb.equal(root.get("fechaModificacion"), filter.getFechaModificacion()));
             cq.orderBy(cb.desc(root.get("fechaModificacion")));
         }
         if(filter.getId()!=null){
@@ -241,101 +237,20 @@ public class ConfigEmailsManager {
         return new PagedResponse<ConfigEmails>((int) page.getTotalElements(),page.getTotalPages(), paging.getPage(), paging.getPageSize(), page.getContent());   
     }
 
-    public ConfigEmails createConfigEmails(ConfigEmails configEmails) throws BusinessLogicException, ExistentEntityException, EntityNotExistentException {
-        validateConfigEmails(configEmails);
-        //validateUnique(configEmails);
-        configEmails.setBorrado(Boolean.FALSE);
-        return configEmailsRepository.save(configEmails);
-    }
+    @Transactional(rollbackFor = { BusinessLogicException.class, Exception.class })
+	public ConfigEmails save(ConfigEmails entity) {
+		return configEmailsRepository.save(entity);
+	}
 
-    private void validateConfigEmails(ConfigEmails configEmails) throws BusinessLogicException, EntityNotExistentException {
-        if (configEmails.getGrupoEmpresa()==null) {
-            throw new BusinessLogicException("El campo GrupoEmpresa es requerido para el objeto ConfigEmails");
-        } else {
-            if(configEmails.getGrupoEmpresa().getId()==null){
-                throw new BusinessLogicException("El campo id de GrupoEmpresa es requerido para el objeto ConfigEmails");
-            }
-            empresaManager.getById(configEmails.getGrupoEmpresa().getId());
-        }
-    }
-    
-    /*private void validateUnique(ConfigEmails configEmails) throws ExistentEntityException {
-        List<ConfigEmails> configEmailses = configEmailsRepository.findByNombre(configEmails.getNombre());
-        if (configEmailses!=null && !configEmailses.isEmpty()) {
-            throw new ExistentEntityException(ConfigEmails.class,"nombre="+configEmails.getNombre());
-        } 
-    }
-*/
-    public ConfigEmails updateConfigEmails(Integer configEmailsId, ConfigEmails configEmails) throws EntityNotExistentException, BusinessLogicException {
-        
-        ConfigEmails persistedConfigEmails = getById(configEmailsId);
-        if (persistedConfigEmails != null) {
-            if(configEmails.getAmbientePruebas()!=null){
-                persistedConfigEmails.setAmbientePruebas(configEmails.getAmbientePruebas());
-            }
-            if(configEmails.getDeshabilitarTLS()!=null){
-                persistedConfigEmails.setDeshabilitarTLS(configEmails.getDeshabilitarTLS());
-            }
-            if(configEmails.getEmailCXPHost()!=null){
-                persistedConfigEmails.setEmailCXPHost(configEmails.getEmailCXPHost());
-            }
-            if(configEmails.getEmailCXPPassword()!=null){
-                persistedConfigEmails.setEmailCXPPassword(configEmails.getEmailCXPPassword());
-            }
-            if(configEmails.getEmailCXPPuerto()!=null){
-                persistedConfigEmails.setEmailCXPPuerto(configEmails.getEmailCXPPuerto());
-            }
-            if(configEmails.getEmailCXPUsuario()!=null){
-                persistedConfigEmails.setEmailCXPUsuario(configEmails.getEmailCXPUsuario());
-            }
-            if(configEmails.getEmailCobranzaHost()!=null){
-                persistedConfigEmails.setEmailCobranzaHost(configEmails.getEmailCobranzaHost());
-            }
-            if(configEmails.getEmailCobranzaPassword()!=null){
-                persistedConfigEmails.setEmailCobranzaPassword(configEmails.getEmailCobranzaPassword());
-            }
-            if(configEmails.getEmailCobranzaPuerto()!=null){
-                persistedConfigEmails.setEmailCobranzaPuerto(configEmails.getEmailCobranzaPuerto());
-            }
-            if(configEmails.getEmailCobranzaUsuario()!=null){
-                persistedConfigEmails.setEmailCobranzaUsuario(configEmails.getEmailCobranzaUsuario());
-            }
-            if(configEmails.getEmailFacturacionHost()!=null){
-                persistedConfigEmails.setEmailFacturacionHost(configEmails.getEmailFacturacionHost());
-            }
-            if(configEmails.getEmailFacturacionPassword()!=null){
-                persistedConfigEmails.setEmailFacturacionPassword(configEmails.getEmailFacturacionPassword());
-            }
-            if(configEmails.getEmailFacturacionPuerto()!=null){
-                persistedConfigEmails.setEmailFacturacionPuerto(configEmails.getEmailFacturacionPuerto());
-            }
-            if(configEmails.getEmailFacturacionUsuario()!=null){
-                persistedConfigEmails.setEmailFacturacionUsuario(configEmails.getEmailFacturacionUsuario());
-            }
-            if(configEmails.getGrupoEmpresa()!=null){
-                persistedConfigEmails.setGrupoEmpresa(configEmails.getGrupoEmpresa());
-            }
-            if(configEmails.getUsaCifradoDefault()!=null){
-                persistedConfigEmails.setUsaCifradoDefault(configEmails.getUsaCifradoDefault());
-            }
-            if(configEmails.getUsaSSL()!=null){
-                persistedConfigEmails.setUsaSSL(configEmails.getUsaSSL());
-            }
-            if(configEmails.getUsuario()!=null){
-                persistedConfigEmails.setUsuario(configEmails.getUsuario());
-            }
-            
-            return configEmailsRepository.save(persistedConfigEmails);
-        } else {
-            throw new EntityNotExistentException(ConfigEmails.class,configEmailsId.toString());
-        }
-    }
+	@Transactional
+	public ConfigEmails update(ConfigEmails entity) {
+		return configEmailsRepository.save(entity);
+	}
 
-    public void deleteConfigEmails(Integer configEmailsId) throws EntityNotExistentException {
-        ConfigEmails configEmails = getById(configEmailsId);
-        configEmails.setBorrado(Boolean.TRUE);
-        configEmailsRepository.save(configEmails);
-    }
+	@Transactional
+	public void delete(ConfigEmails entity) {
+		configEmailsRepository.save(entity);
+	}
 
     public List<ConfigEmails> findAll(){
         return configEmailsRepository.findAll();

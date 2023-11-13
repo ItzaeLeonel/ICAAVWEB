@@ -6,12 +6,11 @@ package com.sistemasmig.icaavWeb.accounting.managers;
 
 import com.sistemasmig.icaavWeb.accounting.containers.PagedResponse;
 import com.sistemasmig.icaavWeb.accounting.containers.Paging;
-
-import com.sistemasmig.icaavWeb.accounting.models.dto.DemoLista;
+import com.sistemasmig.icaavWeb.accounting.entity.CuentasEspeciales;
 import com.sistemasmig.icaavWeb.accounting.exceptions.BusinessLogicException;
 import com.sistemasmig.icaavWeb.accounting.exceptions.EntityNotExistentException;
 import com.sistemasmig.icaavWeb.accounting.exceptions.ExistentEntityException;
-import com.sistemasmig.icaavWeb.accounting.models.CuentasEspeciales;
+import com.sistemasmig.icaavWeb.accounting.model.DemoLista;
 import com.sistemasmig.icaavWeb.accounting.repositories.CuentasEspecialesRepository;
 import com.sistemasmig.icaavWeb.accounting.repositories.StoredProcedure.CuentasEspecialesSPRepository;
 

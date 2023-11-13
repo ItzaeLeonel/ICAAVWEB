@@ -4,9 +4,10 @@
  */
 package com.sistemasmig.icaavWeb.accounting.services;
 
-import com.sistemasmig.icaavWeb.accounting.models.dto.ListDatosEmpresa;
 import com.sistemasmig.icaavWeb.accounting.exceptions.EntityNotExistentException;
 import com.sistemasmig.icaavWeb.accounting.managers.DatosEmpresaSPManager;
+import com.sistemasmig.icaavWeb.accounting.model.ListDatosEmpresa;
+
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
